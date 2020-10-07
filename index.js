@@ -20,6 +20,7 @@ client.once('ready', () => {
 
 // Reading message to determine if they are a command
 client.on('message', (message) => {
+    // Checking if bot prefix was used
     if(!message.content.startsWith(prefix) || message.author.bot) {
         return;
     }
@@ -29,6 +30,15 @@ client.on('message', (message) => {
 
     if(command === 'ping') {
         client.commands.get('ping').execute(message, args);
+    }
+    else if(command === 'portfolio') {
+        client.commands.get('portfolio').execute(message, args);
+    }
+    else if(command === 'avatar') {
+        client.commands.get('avatar').execute(message, args, client);
+    }
+    else if(command === 'help') {
+        client.commands.get('help').execute(message, args);
     }
 })
 
