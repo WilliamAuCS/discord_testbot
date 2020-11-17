@@ -1,5 +1,5 @@
 const { createUserProfile, writeToData } = require('../manage_data');
-const commands = ['set'];
+const { bot_name } = require('../index.js')
 
 // Keys the user is able to manage with commands
 const json_keys_standard = [
@@ -9,10 +9,10 @@ const json_keys_standard = [
 const json_keys_privileged = [
     "username", "message_count", "nickname", "pronouns", "description"
 ];
-
-const privileged_roles = [
-    "777715211632508950",
-]
+// Privileged roles and their names
+const privileged_roles = {
+    lesser_god: "777715211632508950",
+}
 
 module.exports = {
     name: 'profile',
@@ -30,10 +30,11 @@ module.exports = {
             console.log("not in system")
             createUserProfile(message);
         }
+
         // Checks if current member has privileges
         if (message.member.roles.cache.some((r) => {
-            for (let i = 0; i < privileged_roles.length; i++) {
-                if (r.id === privileged_roles[i]) {
+            for (var key in privileged_roles) {
+                if (r.id === privileged_roles[key]) {
                     console.log("priviledged")
                     privileged = true;
                     break;
@@ -96,7 +97,7 @@ module.exports = {
                 { name: "-------------------------------------------------------------------------------", value: "\u200b" },
             )
             .setTimestamp()
-            .setFooter('Test Server', 'https://i.imgur.com/R72P7Sa.png?2');
+            .setFooter(bot_name, 'https://i.imgur.com/R72P7Sa.png?2');
 
         message.channel.send(embed);
     }

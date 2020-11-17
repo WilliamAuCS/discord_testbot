@@ -3,9 +3,14 @@ const client = new Discord.Client();
 const fs = require('fs');
 const { Server } = require('http');
 const login_key = fs.readFileSync('./credentials/client_login.key', { encoding: 'utf-8' });
-//const { twitch_get_bearer_token } = require('./twitch_api');
+//const { twitch_get_bearer_token } = require('./tools/twitch_api');
 const manage_data = require('./manage_data');
 const data = manage_data.get_data();
+const cm = require('./tools/chat_manager');
+
+// Bot name
+const bot_name = 'Rat Bot';
+module.exports = { bot_name };
 
 const prefix = '!';
 
@@ -26,6 +31,7 @@ client.once('ready', () => {
 
 // Reading message to determine if they are a command
 client.on('message', (message) => {
+    cm.checkMessage(message);
     // If user exists in file incriment message_count
     if (!!data.user_data[message.author.id]) {
         data.user_data[message.author.id].message_count += 1;
@@ -78,6 +84,9 @@ client.on('message', (message) => {
     }
     else if (command === 'pong') {
         message.channel.send("?ping");
+    }
+    else if(command === 'leaderboard') {
+        client.commands.get('leaderboard').execute(data, message, Discord);
     }
     else if (command === 'yee') {
         let str = '';
